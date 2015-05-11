@@ -59,10 +59,10 @@ Project
 ```
 
 
-### 今後
+## 今後
 - [my-web-foundation](https://github.com/ucym/my-web-foundation)に取り込むかもしれない。
 - TypeScriptに対応するかもしれない
 - サンプルプロジェクトの用意
 
-### 参考にしました
+## 参考にしました
 [frontainer/frontplate](https://github.com/frontainer/frontplate)
