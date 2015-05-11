@@ -23,7 +23,7 @@ genPaths = (dir, ext, withinDirs = []) ->
 # Webpack Task
 #
 g.task "webpack", (cb) ->
-    g.src genPaths("coffee", ".coffee")
+    g.src genPaths("coffee", ".coffee").concat(genPaths("js", ".js"))
         .pipe $.plumber()
         .pipe $.webpack(require("./gulp_config/webpack.coffee"))
         # .pipe $.if(option.js.uglify, $.uglify())
@@ -77,7 +77,10 @@ g.task "images", ->
 # File watch Task
 #
 g.task "watch", ->
-    $.watch ["#{option.sourceDir}/coffee/**/*.{coffee,jade,cson}"], ->
+    $.watch [
+        "#{option.sourceDir}/coffee/**/*.{coffee,jade,cson}"
+        "#{option.sourceDir}/js/**/*.{js,jade,cson}"
+    ], ->
         g.start ["webpack"]
 
     $.watch ["#{option.sourceDir}/vendor_js/**/*.js"], ->
@@ -89,7 +92,11 @@ g.task "watch", ->
     $.watch ["#{option.sourceDir}/styl/**/*.styl"], ->
         g.start ["stylus"]
 
-    $.watch ["#{option.sourceDir}/**/*.jade", "!#{option.sourceDir}/coffee/**/*.jade"], ->
+    $.watch [
+        "#{option.sourceDir}/**/*.jade"
+        "!#{option.sourceDir}/coffee/**/*.jade"
+        "!#{option.sourceDir}/js/**/*.jade"
+    ], ->
         g.start ["jade"]
 
     $.watch ["#{option.sourceDir}/img/**/*.{png,jpg,jpeg,gif}"], ->

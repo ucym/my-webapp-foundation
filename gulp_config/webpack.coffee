@@ -13,7 +13,10 @@ module.exports =
 
     devtool     : "#source-map"
     resolve     :
-        root            : "#{option.sourceDir}/coffee"
+        root            : [
+            "#{option.sourceDir}/coffee"
+            "#{option.sourceDir}/js"
+        ]
         extensions      : ["", ".coffee", ".js"]
         modulesDirectories  : [
             "bower_components"
@@ -28,6 +31,7 @@ module.exports =
             {test: /\.coffee$/, loader: "coffee-loader"}
             {test: /\.jade$/,   loader: "jade-loader"}
             {test: /\.cson$/,   loader: "cson-loader"}
+            {test: /\.json$/,   loader: "json-loader"}
         ]
 
     plugins         : [

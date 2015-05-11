@@ -22,6 +22,19 @@ publishフォルダ内に出力します。
 _mixinライブラリ_ や _レイアウトテンプレートファイル_ をビルドさせないために  
 名前が "\_" から始まるファイルと、"\_"から始まるフォルダ内のファイルはビルドされません。  
 
+### CoffeeScript, JavaScriptについて
+- `JavaScript`・`CoffeeScript`で開発することが可能です。  
+  どちらか片方、および両方の言語を使用することが出来ます。  
+  たとえばJavaScriptで書かれたモジュールをCoffeeScriptからrequireすることも可能です。
+
+- `src/coffee`, `src/js`をルートとしてファイル分割が可能です。  
+  分割したファイルは`require関数`で読み込みます。
+
+- `src/coffee`, `src/js`内のjadeファイルは無視されます。  
+    (require関数を用いてクライアントサイドのテンプレートとして取り込むことが可能です。)
+
+- `.coffee`, `.js`, `.cson`, `.json`, `.jade`をrequireすることが出来ます。
+
 ## ディレクトリ構成
 ```
 Project
@@ -34,7 +47,8 @@ Project
 │　└ coffee         -- CoffeeScript (publish/jsに出力される）
 │　└ styl           -- Stylus (publish/cssに出力される）
 │　└ img            -- 画像アセット(publish/imgに最適化されて保存される)
-│  └ (sass)        -- Sass (Sassを利用することが出来ます。 -> publish/css)
+│　└ (sass)         -- Sass (Sassを利用することが出来ます。 -> publish/css)
+│　└ (js)           -- JavaScript (publish/jsに出力される)
 │
 └ gulp_config       -- Gulpのモジュール別設定ファイル
 │
@@ -44,11 +58,6 @@ Project
 └ README.md
 ```
 
-- `src/coffee`をルートとしてファイル分割が可能です。  
-  分割したファイルは`require関数`で読み込みます。
-- `src/coffee`内のjadeファイルは無視されます。  
-    (require関数を用いてクライアントサイドテンプレートとして取り込むことが出来ます。)
-- CoffeeScriptでは`.cson`, `.coffee`, `.jade`をrequireすることが出来ます。
 
 ### 今後
 - [my-web-foundation](https://github.com/ucym/my-web-foundation)に取り込むかもしれない。
