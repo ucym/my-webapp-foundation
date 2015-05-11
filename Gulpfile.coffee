@@ -1,0 +1,143 @@
+g       = require "gulp"
+$       = do require "gulp-load-plugins"
+
+bs      = require "browser-sync"
+spawn   = require("child_process").spawn
+
+option  = require "./gulp_config/gulp.coffee"
+
+genPaths = (dir, ext, withinDirs = []) ->
+    if (ext isnt null or ext isnt "") and ext[0] isnt "."
+        ext = ".#{ext}"
+
+    if dir isnt ""
+        dir = "#{dir}/"
+
+    return [
+        "#{option.sourceDir}/#{dir}**/*#{ext}"
+        "!#{option.sourceDir}/#{dir}**/_*#{ext}"
+        "!#{option.sourceDir}/#{dir}_*/**"
+    ].concat withinDirs
+
+#
+# Webpack Task
+#
+g.task "webpack", (cb) ->
+    g.src genPaths("coffee", ".coffee")
+        .pipe $.plumber()
+        .pipe $.webpack(require("./gulp_config/webpack.coffee"))
+        # .pipe $.if(option.js.uglify, $.uglify())
+        .pipe g.dest("#{option.publishDir}/js/")
+
+#
+# JavaScript copy Task
+#
+g.task "vendor_js", ->
+    g.src genPaths("vendor_js", ".js")
+        .pipe $.plumber()
+        .pipe g.dest("#{option.publishDir}/#{option.js.vendorJsDir}/")
+
+#
+# Sass Task
+#
+g.task "sass", ->
+    g.src getPaths("sass", ".{sass,scss}")
+        .pipe $.plumber()
+        .pipe $.sass(require("./gulp_config/sass.coffee")).on('error', $.sass.logError)
+        .pipe g.dest("#{option.publishDir}/css/")
+
+#
+# Stylus Task
+#
+g.task "stylus", ->
+    g.src genPaths("styl", ".styl")
+        .pipe $.plumber()
+        .pipe $.stylus(require("./gulp_config/stylus.coffee"))
+        .pipe g.dest("#{option.publishDir}/css/")
+
+#
+# Jade Task
+#
+g.task "jade", ->
+    g.src genPaths("", "jade", ["!#{option.sourceDir}/coffee/**/*.jade"])
+        .pipe $.plumber()
+        .pipe $.jade()
+        .pipe $.prettify()
+        .pipe g.dest("#{option.publishDir}/")
+
+#
+# Image minify Task
+#
+g.task "images", ->
+    g.src genPaths("img", "{png,jpg,jpeg,gif}")
+        .pipe $.imagemin(require("./gulp_config/imagemin.coffee"))
+        .pipe g.dest("#{option.publishDir}/img/")
+
+#
+# File watch Task
+#
+g.task "watch", ->
+    $.watch ["#{option.sourceDir}/coffee/**/*.{coffee,jade,cson}"], ->
+        g.start ["webpack"]
+
+    $.watch ["#{option.sourceDir}/vendor_js/**/*.js"], ->
+        g.start ["vendor_js"]
+
+    $.watch ["#{option.sourceDir}/sass/**/*.{sass,scss}"], ->
+        g.start ["sass"]
+
+    $.watch ["#{option.sourceDir}/styl/**/*.styl"], ->
+        g.start ["stylus"]
+
+    $.watch ["#{option.sourceDir}/**/*.jade", "!#{option.sourceDir}/coffee/**/*.jade"], ->
+        g.start ["jade"]
+
+    $.watch ["#{option.sourceDir}/img/**/*.{png,jpg,jpeg,gif}"], ->
+        g.start ["images"]
+
+#
+# Browser-Sync task
+#
+g.task "bs", ->
+    bs
+        port    : 3000
+        open    : false
+        notify  : false
+        files   : "release/**"
+        index   : "index.html"
+        server  :
+            baseDir : option.publishDir
+
+#
+# Gulpfile watcher
+#
+g.task "self-watch", ["bs"], ->
+    proc    = null
+    command = null
+    args    = null
+
+    if /^win/.test(process.platform)
+        # windows
+        command = "cmd"
+        args = ["/c", "gulp", "devel"]
+    else
+        command = "gulp"
+        args = ["devel"]
+
+    spawnChildren = ->
+        proc.kill() if proc?
+        proc = spawn command, args, {stdio: 'inherit'}
+
+    $.watch ["Gulpfile.coffee", "./gulp_config/**"], ->
+        spawnChildren()
+
+    $.watch ["#{option.publishDir}/**/*"], ->
+        bs.reload({stream: true})
+
+    spawnChildren()
+
+#
+# Define default
+#
+g.task "devel", ["webpack", "stylus", "jade", "images", "watch"]
+g.task "default", ["self-watch"]
