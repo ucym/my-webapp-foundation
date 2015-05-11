@@ -48,6 +48,7 @@ Project
 │　└ coffee         -- CoffeeScript (publish/jsに出力される）
 │　└ styl           -- Stylus (publish/cssに出力される）
 │　└ img            -- 画像アセット(publish/imgに最適化されて保存される)
+│　└ vendor_js      -- JavaScriptライブラリ用ディレクトリ (publish/jsにコピーされる)
 │　└ (sass)         -- Sass (Sassを利用することが出来ます。 -> publish/css)
 │　└ (js)           -- JavaScript (publish/jsに出力される)
 │
