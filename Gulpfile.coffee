@@ -41,7 +41,7 @@ g.task "vendor_js", ->
 # Sass Task
 #
 g.task "sass", ->
-    g.src getPaths("sass", ".{sass,scss}")
+    g.src genPaths("sass", ".{sass,scss}")
         .pipe $.plumber()
         .pipe $.sass(require("./gulp_config/sass.coffee")).on('error', $.sass.logError)
         .pipe g.dest("#{option.publishDir}/css/")
@@ -69,7 +69,7 @@ g.task "jade", ->
 # Image minify Task
 #
 g.task "images", ->
-    g.src genPaths("img", "{png,jpg,jpeg,gif}")
+    g.src genPaths("img", ".{png,jpg,jpeg,gif}")
         .pipe $.imagemin(require("./gulp_config/imagemin.coffee"))
         .pipe g.dest("#{option.publishDir}/img/")
 
@@ -146,5 +146,5 @@ g.task "self-watch", ["bs"], ->
 #
 # Define default
 #
-g.task "devel", ["webpack", "stylus", "jade", "images", "watch"]
+g.task "devel", ["webpack", "sass", "stylus", "jade", "images", "watch"]
 g.task "default", ["self-watch"]
