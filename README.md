@@ -51,6 +51,7 @@ Project
 │　└ styl           -- Stylus (publish/cssに出力される）
 │　└ img            -- 画像アセット(publish/imgに最適化されて保存される)
 │　└ vendor_js      -- JavaScriptライブラリ用ディレクトリ (publish/jsにコピーされる)
+│　└ [fonts]        -- WebFont用ディレクトリ (publish/fontsにコピーされる)
 │　└ [css]          -- CSS (publish/cssにコピーされる)
 │　└ [sass]         -- Sass (Sassを利用することが出来ます。 -> publish/css)
 │　└ [js]           -- JavaScript (publish/jsに出力される)

@@ -37,6 +37,11 @@ g.task "vendor_js", ->
         .pipe $.plumber()
         .pipe g.dest("#{option.publishDir}/#{option.js.vendorJsDir}/")
 
+g.task "fonts_copy", ->
+    g.src genPaths("fonts", ".{ttf,otf,eot,woff,svg}")
+        .pipe $.plumber()
+        .pipe g.dest("#{option.publishDir}/fonts/")
+
 #
 # CSS copy task
 #
@@ -93,6 +98,9 @@ g.task "watch", ->
 
     $.watch ["#{option.sourceDir}/vendor_js/**/*.js"], ->
         g.start ["vendor_js"]
+
+    $.watch ["#{option.sourceDir}/fonts/**/*.{ttf,otf,eot,woff,svg}"], ->
+        g.start ["fonts_copy"]
 
     $.watch ["#{option.sourceDir}/css/**/*.css"], ->
         g.start ["css_copy"]
