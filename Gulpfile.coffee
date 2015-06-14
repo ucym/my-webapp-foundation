@@ -165,5 +165,5 @@ g.task "self-watch", ["bs"], ->
 #
 # Define default
 #
-g.task "devel", ["webpack", "sass", "stylus", "jade", "images", "watch"]
+g.task "devel", ["webpack", "sass", "stylus", "jade", "images", "fonts_copy", "css_copy", "watch"]
 g.task "default", ["self-watch"]
