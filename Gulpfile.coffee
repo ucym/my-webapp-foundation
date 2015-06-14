@@ -38,6 +38,14 @@ g.task "vendor_js", ->
         .pipe g.dest("#{option.publishDir}/#{option.js.vendorJsDir}/")
 
 #
+# CSS copy task
+#
+g.task "css_copy", ->
+    g.src genPaths("css", ".css")
+        .pipe $.plumber()
+        .pipe g.dest("#{option.publishDir}/css/")
+
+#
 # Sass Task
 #
 g.task "sass", ->
@@ -85,6 +93,9 @@ g.task "watch", ->
 
     $.watch ["#{option.sourceDir}/vendor_js/**/*.js"], ->
         g.start ["vendor_js"]
+
+    $.watch ["#{option.sourceDir}/css/**/*.css"], ->
+        g.start ["css_copy"]
 
     $.watch ["#{option.sourceDir}/sass/**/*.{sass,scss}"], ->
         g.start ["sass"]
